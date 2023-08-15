@@ -9,9 +9,53 @@ datasource db {
   provider = "postgresql"
   url      = env("DATABASE_URL")
 }
-model Job {
-  id       Int    @id @default(autoincrement())
-  title    String
-  location String
-  salary   String
+
+model Author {
+  id         Int        @id @default(autoincrement())
+  email      String     @unique
+  password   String
+  name       String     @db.VarChar(255)
+  role       Role       @default(USER)
+  UserCart   UserCart[]
+  favourites Product[]  @relation("FavouriteUserProducts")
+  Order      Order[]
+}
+
+model Product {
+  id             Int        @id @default(autoincrement())
+  title          String     @db.VarChar(255)
+  price          Decimal    @db.Decimal()
+  stars          Int
+  rating         Decimal
+  reviews        Int
+  isGenius       Boolean    @default(false)
+  isTopFavourite Boolean    @default(false)
+  description    String     @db.VarChar(255)
+  added          DateTime   @default(now())
+  UserCart       UserCart[]
+  favourites     Author[]   @relation("FavouriteUserProducts")
+  orders         Order[]    @relation("OrderProduct")
+}
+
+model UserCart {
+  id        Int     @id @default(autoincrement())
+  author    Author  @relation(fields: [authorId], references: [id])
+  authorId  Int
+  product   Product @relation(fields: [productId], references: [id])
+  productId Int
+  quantity  Int
+}
+
+model Order {
+  id        Int       @id @default(autoincrement())
+  createdAt DateTime  @default(now())
+  updatedAt DateTime  @updatedAt
+  userId    Int
+  user      Author    @relation(fields: [userId], references: [id])
+  products  Product[] @relation("OrderProduct")
+}
+
+enum Role {
+  USER
+  ADMIN
 }
