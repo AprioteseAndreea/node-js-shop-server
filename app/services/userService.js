@@ -1,5 +1,5 @@
 const userModel = require("../models/userModel");
-const prisma = new PrismaClient();
+const prisma = require("@prisma/client");
 
 exports.getAllUsers = async () => {
   return userModel.findMany();

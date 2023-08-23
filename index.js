@@ -1,19 +1,21 @@
 const express = require('express');
-const userRoutes = require('./routes/userRoutes');
-const productRoutes = require('./routes/productRoutes');
-const userCartRoutes = require('./routes/userCartRoutes');
-const userFavouriteRoutes = require('./routes/userFavouriteRoutes');
-const orderRoutes = require('./routes/orderRoutes');
-
+const cors = require('cors');
 const app = express();
 
-app.use(express.json());
+const userRoutes = require('./app/routes/userRoutes');
+const productRoutes = require('./app/routes/productRoutes');
+const userCartRoutes = require('./app/routes/userCartRoutes');
+const orderRoutes = require('./app/routes/orderRoutes');
 
-app.use('/api/users', userRoutes);
-app.use('/api/products', productRoutes);
-app.use('/api/user-cart', userCartRoutes);
-app.use('/api/user-favourites', userFavouriteRoutes);
-app.use('/api/order', orderRoutes);
+
+app.use(express.json());
+// Use the cors middleware to enable CORS
+app.use(cors());
+
+app.use('/api', userRoutes);
+app.use('/api', productRoutes);
+app.use('/api', userCartRoutes);
+app.use('/api', orderRoutes);
 
 const PORT = process.env.PORT || 3000;
 app.listen(PORT, () => {

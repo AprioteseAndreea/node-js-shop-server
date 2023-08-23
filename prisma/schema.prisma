@@ -32,6 +32,7 @@ model Product {
   isTopFavourite Boolean    @default(false)
   description    String     @db.VarChar(255)
   added          DateTime   @default(now())
+  img            String     @default("img")
   UserCart       UserCart[]
   favourites     Author[]   @relation("FavouriteUserProducts")
   orders         Order[]    @relation("OrderProduct")
